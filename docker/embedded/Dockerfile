@@ -55,10 +55,14 @@ RUN gradle dependencies --no-daemon || true
 
 COPY . .
 
-ARG STIRLING_FLAVOR=proprietary
+# This fork publishes its image, so it builds the MIT-licensed "core" flavor by default:
+# app/proprietary and frontend/src/processor are under the Stirling PDF User License,
+# which forbids distributing them. Pass STIRLING_FLAVOR=proprietary and BUILD_PORTAL=true
+# only for a private build covered by a Stirling PDF licence.
+ARG STIRLING_FLAVOR=core
 ENV STIRLING_FLAVOR=${STIRLING_FLAVOR}
 # Include the processor (admin portal) in the bundled editor; false leaves it out.
-ARG BUILD_PORTAL=true
+ARG BUILD_PORTAL=false
 
 # Which Stirling account the portal connects to. Build-time because Vite inlines VITE_* into the
 # bundle; there is no runtime override. Empty keeps the committed frontend .env defaults, which are
@@ -108,6 +112,13 @@ RUN apt-get update \
 FROM ${BASE_IMAGE}
 
 ARG VERSION_TAG
+
+# The base image is pinned by digest: upgrade Ubuntu packages so each weekly
+# rebuild still picks up security fixes.
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends; \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -165,14 +176,14 @@ ENV VERSION_TAG=$VERSION_TAG \
 
 # Metadata labels
 LABEL org.opencontainers.image.title="Stirling-PDF" \
-      org.opencontainers.image.description="Full version with Calibre, LibreOffice, Tesseract, OCRmyPDF" \
-      org.opencontainers.image.source="https://github.com/Stirling-Tools/Stirling-PDF" \
+      org.opencontainers.image.description="Stirling PDF core (MIT) with Calibre, LibreOffice, Tesseract, OCRmyPDF" \
+      org.opencontainers.image.source="https://github.com/PabloVTM/Stirling-PDF" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.vendor="Stirling-Tools" \
-      org.opencontainers.image.url="https://www.stirlingpdf.com" \
+      org.opencontainers.image.vendor="PabloVTM, based on the work of Stirling-Tools" \
+      org.opencontainers.image.url="https://github.com/PabloVTM/Stirling-PDF" \
       org.opencontainers.image.documentation="https://docs.stirlingpdf.com" \
-      maintainer="Stirling-Tools" \
-      org.opencontainers.image.authors="Stirling-Tools" \
+      maintainer="PabloVTM" \
+      org.opencontainers.image.authors="Stirling-Tools, PabloVTM" \
       org.opencontainers.image.version="${VERSION_TAG}" \
       org.opencontainers.image.keywords="PDF, manipulation, API, Spring Boot, React"
 

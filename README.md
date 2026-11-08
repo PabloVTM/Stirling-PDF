@@ -1,69 +1,98 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/main/docs/stirling.png" width="80" alt="Stirling PDF logo">
+  <img src="./docs/stirling.png" width="80" alt="Stirling PDF logo">
 </p>
 
-<h1 align="center">Stirling PDF - The Open-Source PDF Platform</h1>
+# Stirling PDF (fork)
 
-Stirling PDF is a powerful, open-source PDF editing platform. Run it as a personal desktop app, in the browser, or deploy it on your own servers with a private API. Edit, sign, redact, convert, and automate PDFs without sending documents to external services.
+A self-hosted PDF platform: edit, merge, split, sign, redact, convert, OCR, compress and automate PDFs from the browser or through a REST API, without sending documents to external services.
 
-<p align="center">
-  <a href="https://hub.docker.com/r/stirlingtools/stirling-pdf">
-    <img src="https://img.shields.io/docker/pulls/frooodle/s-pdf" alt="Docker Pulls">
-  </a>
-  <a href="https://discord.gg/HYmhKj45pU">
-    <img src="https://img.shields.io/discord/1068636748814483718?label=Discord" alt="Discord">
-  </a>
-  <a href="https://scorecard.dev/viewer/?uri=github.com/Stirling-Tools/Stirling-PDF">
-    <img src="https://api.scorecard.dev/projects/github.com/Stirling-Tools/Stirling-PDF/badge" alt="OpenSSF Scorecard">
-  </a>
-  <a href="https://github.com/Stirling-Tools/stirling-pdf">
-    <img src="https://img.shields.io/github/stars/stirling-tools/stirling-pdf?style=social" alt="GitHub Repo stars">
-  </a>
-</p>
+This is a fork of [Stirling-Tools/Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF), maintained at [PabloVTM/Stirling-PDF](https://github.com/PabloVTM/Stirling-PDF) with the PabloVTM terminal theme shared with the other PabloVTM tools.
 
-![Stirling PDF - Dashboard](docs/images/home-light.png)
+![Stirling PDF](docs/images/home-light.png)
 
-## Key Capabilities
+## Image
 
-- **Everywhere you work** - Desktop client, browser UI, and self-hosted server with a private API.
-- **50+ PDF tools** - Edit, merge, split, sign, redact, convert, OCR, compress, and more.
-- **Automation & workflows** - No-code pipelines direct in UI with APIs to process millions of PDFs.
-- **Enterprise‑grade** - SSO, auditing, and flexible on‑prem deployments.
-- **Developer platform** - REST APIs available for nearly all tools to integrate into your existing systems.
-- **Global UI** - Interface available in 40+ languages.
+Images are published to GitHub Container Registry for `linux/amd64` and `linux/arm64`:
 
-For a full feature list, see the docs: **https://docs.stirlingpdf.com**
+| Tag | Content |
+| --- | --- |
+| `ghcr.io/pablovtm/stirling-pdf:latest` | Latest build of `main`. |
+| `ghcr.io/pablovtm/stirling-pdf:YYYY-MM-DD` | Dated version, e.g. `2026-11-08`. A new one is built every Monday with the latest Ubuntu security updates. |
 
-## Quick Start
+The image is the **core** edition: only the MIT-licensed code, with LibreOffice, Calibre, Tesseract and OCRmyPDF for conversions and OCR. The enterprise features under `app/proprietary` and the admin portal under `frontend/src/processor` are covered by the Stirling PDF User License, which does not allow redistribution, so they are not built into this image.
 
-```bash
-docker run -p 8080:8080 docker.stirlingpdf.com/stirlingtools/stirling-pdf
+## Quick start
+
+```yaml
+services:
+  stirling-pdf:
+    container_name: stirling-pdf
+    image: ghcr.io/pablovtm/stirling-pdf:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - ./configs:/configs
+      - ./logs:/logs
+      - ./customFiles:/customFiles
+      - ./pipeline:/pipeline
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
 ```
 
-Then open: http://localhost:8080
+or
 
-For full installation options (including desktop and Kubernetes), see our [Documentation Guide](https://docs.stirlingpdf.com/#documentation-guide).
+```bash
+docker run -d --name stirling-pdf -p 8080:8080 -v ./configs:/configs ghcr.io/pablovtm/stirling-pdf:latest
+```
 
-## Resources
+Then open http://localhost:8080. The first start takes a minute or two; the container reports its health on `/api/v1/info/status`.
 
-- [**Documentation**](https://docs.stirlingpdf.com)
-- [**Homepage**](https://stirling.com)
-- [**API Docs**](https://registry.scalar.com/@stirlingpdf/apis/stirling-pdf-processing-api/)
-- [**Server Plan & Enterprise**](https://docs.stirlingpdf.com/Paid-Offerings)
+| Volume | Content |
+| --- | --- |
+| `/configs` | `settings.yml`, the database and other persistent settings. |
+| `/logs` | Application logs. |
+| `/customFiles` | Custom static files and templates. |
+| `/pipeline` | Watched folders for automated pipelines. |
 
-## Support
+Configuration lives in `/configs/settings.yml` (created on first start) and can be overridden with environment variables. See the [upstream documentation](https://docs.stirlingpdf.com) for every setting.
 
-- **Community**: [Discord](https://discord.gg/HYmhKj45pU)
-- **Bug Reports**: [GitHub Issues](https://github.com/Stirling-Tools/Stirling-PDF/issues)
+## API
 
-## Contributing
+Almost every tool has a REST endpoint, for example:
 
-We welcome contributions! Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines.
+```bash
+curl -F "fileInput=@a.pdf" -F "fileInput=@b.pdf" http://localhost:8080/api/v1/general/merge-pdfs -o merged.pdf
+```
 
-This project uses [Task](https://taskfile.dev/) as a unified command runner for all build, dev, and test commands. Run `task dev` to get started running the editor, run `task` to see the most common commands, or see the [Developer Guide](docs/developer/DeveloperGuide.md) for full details.
+The interactive API documentation is served by the instance at `/swagger-ui.html`.
 
-For adding translations, see the [Translation Guide](docs/developer/HowToAddNewLanguage.md).
+## Building
+
+```bash
+docker build -f docker/embedded/Dockerfile -t stirling-pdf:local .
+```
+
+The Dockerfile builds the core edition by default. Building it needs about 8 GB of RAM and a recent Docker with BuildKit.
+
+## Development
+
+The project uses [Task](https://taskfile.dev/) for every build, dev and test command. You need JDK 25, Node.js 22 and Task.
+
+```bash
+task             # list the most common commands
+task dev         # run the backend and the editor with hot reload
+task backend:build:ci
+task frontend:check:all
+```
+
+See [AGENTS.md](AGENTS.md) and the [developer guide](docs/developer/DeveloperGuide.md) for details.
+
+## Credits
+
+Stirling PDF is created by [Stirling-Tools](https://github.com/Stirling-Tools) and its contributors. This fork is maintained by [PabloVTM](https://github.com/PabloVTM).
 
 ## License
 
-Stirling PDF is open-core. See [LICENSE](LICENSE) for details.
+Open-core: everything outside the directories listed in [LICENSE](LICENSE) is under the MIT License. Those directories (`app/proprietary`, `app/saas`, `engine`, parts of `frontend/src`) have their own licenses.
