@@ -204,4 +204,23 @@
   --p-c-ffc107: #ffc107;
   --p-c-c2c8e0: #c2c8e0;
   --p-c-4f8ef5: #4f8ef5;
+  /* PabloVTM terminal theme, shared with the other PabloVTM tools. The light
+     side reuses the GitHub greys above (--p-c-f6f8fa, --p-c-eaeef2,
+     --p-c-d0d7de, --p-c-1f2328). */
+  --p-term-bg: #0d1117;
+  --p-term-bg-raised: #161b22;
+  --p-term-surface-raised: #1c2128;
+  --p-term-sunken: #010409;
+  --p-term-hover: #21262d;
+  --p-term-border: #30363d;
+  --p-term-text: #c9d1d9;
+  --p-term-text-muted: #8b949e;
+  --p-term-text-subtle: #6e7681;
+  --p-term-ink-muted: #59636e;
+  --p-term-green-300: #5fe6ab;
+  --p-term-green-400: #3ddc97;
+  --p-term-green-700: #1a7f4b;
+  --p-term-green-800: #13633a;
+  --p-term-amber-400: #f2c14e;
+  --p-term-amber-700: #9a6700;
 }

@@ -100,6 +100,14 @@ export default function Footer({
         >
           {t("footer.issues", "GitHub")}
         </a>
+        <a
+          className="footer-link px-3"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/PabloVTM/Stirling-PDF"
+        >
+          {t("footer.fork", "PabloVTM fork")}
+        </a>
         {isValidLink(finalAccessibilityStatement) && (
           <a
             className="footer-link px-3"

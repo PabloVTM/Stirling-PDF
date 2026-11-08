@@ -1,14 +1,14 @@
-import { Logo } from "@editor/ui/Logo";
+import { TerminalPrompt } from "@editor/ui/TerminalPrompt";
 
 export interface SidebarHeaderProps {
   className?: string;
 }
 
-/** The wordmark; the brand mark sits in the rail beside it. */
+/** The PabloVTM prompt; the Stirling brand mark sits in the rail beside it. */
 export function SidebarHeader({ className }: SidebarHeaderProps) {
   return (
     <div className={`file-sidebar-header${className ? ` ${className}` : ""}`}>
-      <Logo variant="textOnly" textHeight="1.3rem" />
+      <TerminalPrompt path="~/pdf" fontSize="0.95rem" />
     </div>
   );
 }

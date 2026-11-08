@@ -1,0 +1,38 @@
+/* "pablo@vtm:~/stirling-pdf_" shell prompt, the title of the PabloVTM terminal theme. */
+.terminal-prompt {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.terminal-prompt__user,
+.terminal-prompt__cursor {
+  color: var(--c-accent-fg, var(--c-primary));
+}
+
+.terminal-prompt__sep {
+  color: var(--c-text-subtle);
+}
+
+.terminal-prompt__path {
+  color: var(--c-prompt-path, var(--c-text));
+}
+
+.terminal-prompt__cursor {
+  animation: terminal-prompt-blink 1.1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-prompt__cursor {
+    animation: none;
+  }
+}
+
+@keyframes terminal-prompt-blink {
+  50% {
+    opacity: 0;
+  }
+}

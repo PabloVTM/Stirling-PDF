@@ -5290,6 +5290,7 @@ title = "À propos de l’aplatissement des PDF"
 [footer]
 discord = "Discord"
 issues = "GitHub"
+fork = "Fork PabloVTM"
 
 [formFill]
 allSaved = "Tout est enregistré"

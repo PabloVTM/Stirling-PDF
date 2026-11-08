@@ -5138,6 +5138,7 @@ title = "About Flattening PDFs"
 [footer]
 discord = "Discord"
 issues = "GitHub"
+fork = "PabloVTM fork"
 
 [formFill]
 allSaved = "All saved"
