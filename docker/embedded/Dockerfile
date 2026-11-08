@@ -113,12 +113,10 @@ FROM ${BASE_IMAGE}
 
 ARG VERSION_TAG
 
-# The base image is pinned by digest: upgrade Ubuntu packages so each weekly
-# rebuild still picks up security fixes.
-RUN set -eux; \
-    apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends; \
-    rm -rf /var/lib/apt/lists/*
+# No apt-get upgrade here: the base image strips /var/lib/dpkg/info to save
+# space, so apt cannot upgrade packages on top of it. OS security fixes come
+# from new stirling-pdf-base releases (upgraded when they are built), picked
+# up when BASE_VERSION is bumped upstream.
 
 WORKDIR /app
 

@@ -17,7 +17,9 @@ Images are published to GitHub Container Registry for `linux/amd64` and `linux/a
 | Tag | Content |
 | --- | --- |
 | `ghcr.io/pablovtm/stirling-pdf:latest` | Latest build of `main`. |
-| `ghcr.io/pablovtm/stirling-pdf:YYYY-MM-DD` | Dated version, e.g. `2026-11-08`. A new one is built every Monday with the latest Ubuntu security updates. |
+| `ghcr.io/pablovtm/stirling-pdf:YYYY-MM-DD` | Dated version, e.g. `2026-11-08`. A new one is built every Monday. |
+
+OS packages (LibreOffice, Calibre, Tesseract, Ghostscript and the Ubuntu base) come from the upstream `stirlingtools/stirling-pdf-base` image, pinned by digest and released by Stirling-Tools about once a month with its packages upgraded; sync this fork with upstream to pick up a new base.
 
 The image is the **core** edition: only the MIT-licensed code, with LibreOffice, Calibre, Tesseract and OCRmyPDF for conversions and OCR. The enterprise features under `app/proprietary` and the admin portal under `frontend/src/processor` are covered by the Stirling PDF User License, which does not allow redistribution, so they are not built into this image.
 

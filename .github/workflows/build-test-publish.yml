@@ -8,7 +8,7 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    # weekly rebuild to pull in Ubuntu security updates (Monday 04:00 UTC)
+    # weekly rebuild (Monday 04:00 UTC); OS updates come with new upstream base image releases
     - cron: '0 4 * * 1'
 
 permissions:
@@ -73,7 +73,7 @@ jobs:
             VERSION_TAG=${{ needs.version.outputs.version }}
             STIRLING_FLAVOR=core
             BUILD_PORTAL=false
-          # always rebuild from the latest base so apt upgrade picks up security fixes
+          # always rebuild from scratch so app dependencies are re-resolved
           pull: true
           no-cache: true
 
@@ -190,7 +190,7 @@ jobs:
             STIRLING_FLAVOR=core
             BUILD_PORTAL=false
           outputs: type=image,name=${{ needs.version.outputs.image }},push-by-digest=true,name-canonical=true,push=true
-          # always rebuild from the latest base so apt upgrade picks up security fixes
+          # always rebuild from scratch so app dependencies are re-resolved
           pull: true
           no-cache: true
 
