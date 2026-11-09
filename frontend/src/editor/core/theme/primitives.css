@@ -204,23 +204,28 @@
   --p-c-ffc107: #ffc107;
   --p-c-c2c8e0: #c2c8e0;
   --p-c-4f8ef5: #4f8ef5;
-  /* PabloVTM terminal theme, shared with the other PabloVTM tools. The light
-     side reuses the GitHub greys above (--p-c-f6f8fa, --p-c-eaeef2,
-     --p-c-d0d7de, --p-c-1f2328). */
-  --p-term-bg: #0d1117;
-  --p-term-bg-raised: #161b22;
-  --p-term-surface-raised: #1c2128;
-  --p-term-sunken: #010409;
-  --p-term-hover: #21262d;
-  --p-term-border: #30363d;
-  --p-term-text: #c9d1d9;
-  --p-term-text-muted: #8b949e;
-  --p-term-text-subtle: #6e7681;
-  --p-term-ink-muted: #59636e;
-  --p-term-green-300: #5fe6ab;
-  --p-term-green-400: #3ddc97;
-  --p-term-green-700: #1a7f4b;
-  --p-term-green-800: #13633a;
-  --p-term-amber-400: #f2c14e;
-  --p-term-amber-700: #9a6700;
+  /* PabloSystems theme, shared with the other PabloVTM tools: Deep Sage Green
+     #4B5A50, Warm Ivory #F1EEE3, Vibrant Vermillion Red #F20B0B for details,
+     plus the tints that keep text at 4.5:1 in light and dark modes. */
+  --p-ps-ivory: #f1eee3;
+  --p-ps-ivory-200: #f8f6ef;
+  --p-ps-ivory-100: #fdfcf8;
+  --p-ps-ivory-400: #e7e3d6;
+  --p-ps-ivory-500: #e2ddce;
+  --p-ps-ivory-600: #d3cdbb;
+  --p-ps-ivory-muted: #c9c6b9;
+  --p-ps-ink: #2b332e;
+  --p-ps-ink-muted: #5b665f;
+  --p-ps-sage: #4b5a50;
+  --p-ps-sage-700: #3e4b43;
+  --p-ps-sage-200: #a9baae;
+  --p-ps-sage-150: #bccbc0;
+  --p-ps-sage-mist: #9da69f;
+  --p-ps-night: #252c28;
+  --p-ps-night-850: #2e3731;
+  --p-ps-night-800: #38433c;
+  --p-ps-night-950: #1c221f;
+  --p-ps-red: #f20b0b;
+  --p-ps-red-deep: #c40808;
+  --p-ps-red-soft: #ff7a70;
 }

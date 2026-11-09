@@ -170,7 +170,7 @@ export const mantineTheme = createTheme({
   // Primary color
   primaryColor: "primary",
 
-  // PabloVTM terminal theme: everything in the monospace stack from dimensions.css
+  // PabloSystems theme: everything in the monospace stack from dimensions.css
   fontFamily: "var(--font-sans)",
   fontFamilyMonospace: "var(--font-mono)",
   headings: { fontFamily: "var(--font-sans)" },

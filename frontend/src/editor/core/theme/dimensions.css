@@ -45,7 +45,7 @@
   /* --shadow-* is intentionally NOT defined here: editor (drop shadows) and SUI/portal (inset hairlines) reuse the name with different values. */
 
   /* ── Typography ── */
-  /* PabloVTM terminal theme: system monospace fonts only, nothing to download. */
+  /* PabloSystems theme: system monospace fonts only, nothing to download. */
   --font-sans:
     ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
     "DejaVu Sans Mono", monospace;

@@ -8,7 +8,7 @@ interface TerminalPromptProps {
   className?: string;
 }
 
-/** "pablo@vtm:~/stirling-pdf_": the title of the PabloVTM terminal theme. */
+/** "pablo@systems:~/stirling-pdf_": the title of the PabloSystems theme. */
 export function TerminalPrompt({
   path = "~/stirling-pdf",
   cursor = true,
@@ -19,11 +19,11 @@ export function TerminalPrompt({
     <span
       className={`terminal-prompt${className ? ` ${className}` : ""}`}
       style={{ fontSize }}
-      aria-label={`pablo@vtm:${path}`}
-      title={`pablo@vtm:${path}`}
+      aria-label={`pablo@systems:${path}`}
+      title={`pablo@systems:${path}`}
     >
       <span className="terminal-prompt__user" aria-hidden="true">
-        pablo@vtm
+        pablo@systems
       </span>
       <span className="terminal-prompt__sep" aria-hidden="true">
         :

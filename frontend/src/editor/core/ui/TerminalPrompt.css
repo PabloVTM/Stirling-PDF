@@ -1,4 +1,4 @@
-/* "pablo@vtm:~/stirling-pdf_" shell prompt, the title of the PabloVTM terminal theme. */
+/* "pablo@systems:~/pdf_" shell prompt, the title of the PabloSystems theme. */
 .terminal-prompt {
   font-family: var(--font-mono);
   font-weight: 700;
@@ -8,8 +8,7 @@
   line-height: 1.2;
 }
 
-.terminal-prompt__user,
-.terminal-prompt__cursor {
+.terminal-prompt__user {
   color: var(--c-accent-fg, var(--c-primary));
 }
 
@@ -22,6 +21,7 @@
 }
 
 .terminal-prompt__cursor {
+  color: var(--c-prompt-cursor, var(--c-accent-fg, var(--c-primary)));
   animation: terminal-prompt-blink 1.1s steps(1) infinite;
 }
 

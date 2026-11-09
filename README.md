@@ -6,7 +6,7 @@
 
 A self-hosted PDF platform: edit, merge, split, sign, redact, convert, OCR, compress and automate PDFs from the browser or through a REST API, without sending documents to external services.
 
-This is a fork of [Stirling-Tools/Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF), maintained at [PabloVTM/Stirling-PDF](https://github.com/PabloVTM/Stirling-PDF) with the PabloVTM terminal theme shared with the other PabloVTM tools.
+This is a fork of [Stirling-Tools/Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF), maintained at [PabloVTM/Stirling-PDF](https://github.com/PabloVTM/Stirling-PDF) with the PabloSystems theme shared with the other PabloVTM tools: Deep Sage Green `#4B5A50`, Warm Ivory `#F1EEE3` and Vibrant Vermillion Red `#F20B0B` for details, system monospace fonts and a `pablo@systems:~/pdf` prompt in the sidebar, in light and dark modes.
 
 ![Stirling PDF](docs/images/home-light.png)
 
@@ -17,7 +17,7 @@ Images are published to GitHub Container Registry for `linux/amd64` and `linux/a
 | Tag | Content |
 | --- | --- |
 | `ghcr.io/pablovtm/stirling-pdf:latest` | Latest build of `main`. |
-| `ghcr.io/pablovtm/stirling-pdf:YYYY-MM-DD` | Dated version, e.g. `2026-11-08`. A new one is built every Monday. |
+| `ghcr.io/pablovtm/stirling-pdf:YYYY-MM-DD` | Dated version, e.g. `2026-11-08`. Published when a git tag of the same name is pushed. |
 
 OS packages (LibreOffice, Calibre, Tesseract, Ghostscript and the Ubuntu base) come from the upstream `stirlingtools/stirling-pdf-base` image, pinned by digest and released by Stirling-Tools about once a month with its packages upgraded; sync this fork with upstream to pick up a new base.
 
@@ -69,6 +69,17 @@ curl -F "fileInput=@a.pdf" -F "fileInput=@b.pdf" http://localhost:8080/api/v1/ge
 ```
 
 The interactive API documentation is served by the instance at `/swagger-ui.html`.
+
+## Releasing
+
+Images are built by GitHub Actions. A push to `main` publishes `latest`; a dated version is published by pushing a tag named after the day:
+
+```bash
+git tag 2026-11-09
+git push origin 2026-11-09
+```
+
+The workflow tests the image first, then publishes `ghcr.io/pablovtm/stirling-pdf:2026-11-09` and `latest` for `linux/amd64` and `linux/arm64`. There is no scheduled rebuild: tag a new version when you want one.
 
 ## Building
 

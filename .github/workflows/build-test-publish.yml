@@ -7,9 +7,6 @@ on:
     tags: ['[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]']
   pull_request:
   workflow_dispatch:
-  schedule:
-    # weekly rebuild (Monday 04:00 UTC); OS updates come with new upstream base image releases
-    - cron: '0 4 * * 1'
 
 permissions:
   contents: read
@@ -23,27 +20,21 @@ jobs:
     name: Compute version
     runs-on: ubuntu-latest
     outputs:
-      today: ${{ steps.version.outputs.today }}
       version: ${{ steps.version.outputs.version }}
       image: ${{ steps.version.outputs.image }}
     steps:
       - name: Compute version and image name
         id: version
         env:
-          EVENT_NAME: ${{ github.event_name }}
           REF_TYPE: ${{ github.ref_type }}
           REF_NAME: ${{ github.ref_name }}
         run: |
-          today="$(date -u +%Y-%m-%d)"
           if [ "$REF_TYPE" = "tag" ]; then
             version="$REF_NAME"
-          elif [ "$EVENT_NAME" = "schedule" ]; then
-            version="$today"
           else
             version="sha-${GITHUB_SHA::7}"
           fi
           {
-            echo "today=$today"
             echo "version=$version"
             echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/stirling-pdf"
           } >> "$GITHUB_OUTPUT"
@@ -216,7 +207,7 @@ jobs:
     needs: [version, build]
     runs-on: ubuntu-latest
     permissions:
-      contents: write # push the date git tag on scheduled builds
+      contents: read
       packages: write
     steps:
       - name: Download digests
@@ -244,8 +235,6 @@ jobs:
           tags: |
             # git tag 2026-11-08 -> image tag 2026-11-08
             type=ref,event=tag
-            # monday rebuild -> image tag of the day
-            type=raw,value=${{ needs.version.outputs.today }},enable=${{ github.event_name == 'schedule' }}
             type=ref,event=branch
             type=sha
             type=raw,value=latest,enable=${{ github.ref_type == 'tag' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
@@ -259,21 +248,3 @@ jobs:
           # shellcheck disable=SC2046,SC2086
           docker buildx imagetools create $tags $(printf "${IMAGE}@sha256:%s " *)
           docker buildx imagetools inspect "${IMAGE}:$(jq -r '.tags[0] | split(":")[1]' <<< "$DOCKER_METADATA_OUTPUT_JSON")"
-
-      - name: Create the date git tag for scheduled builds
-        if: github.event_name == 'schedule'
-        # tags pushed with GITHUB_TOKEN do not re-trigger this workflow
-        env:
-          TAG: ${{ needs.version.outputs.today }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          remote="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          if git ls-remote --exit-code --tags "$remote" "refs/tags/${TAG}" >/dev/null; then
-            echo "git tag ${TAG} already exists, skipping"
-            exit 0
-          fi
-          sha="${GITHUB_SHA}"
-          git init -q tagger && cd tagger
-          git fetch -q --depth=1 "$remote" "$sha"
-          git tag "${TAG}" "$sha"
-          git push "$remote" "refs/tags/${TAG}"
